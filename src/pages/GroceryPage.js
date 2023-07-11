@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import GroceryList from "../components/GroceryList";
 import TitleCard from "../components/TitleCard";
 import axios from "axios";
-import { BACKEND_URL } from "../Constant";
+import { BACKEND_URL, SORT_LABEL } from "../Constant";
 import SortButton from "../components/buttons/SortButton";
 import { HANDLE_SORT } from "../helperFunctions/HelperFunctions";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -42,8 +42,8 @@ const GroceryPage = () => {
         method: "GET",
         url: `${BACKEND_URL}/user/${user.userID}/grocery`,
       });
-      const temp = HANDLE_SORT("By Ticked", res.data);
-      setGroceryList(temp);
+      // const temp = HANDLE_SORT("By Ticked", res.data);
+      setGroceryList(res.data);
       setLoading(false);
     } catch (err) {
       alert(ErrorHandler(err.response.data));
@@ -68,7 +68,7 @@ const GroceryPage = () => {
 
   useEffect(() => {
     if (user === undefined) {
-      navigate("/home");
+      navigate("/");
     } else {
       setLoading(true);
       if (categories === undefined) {
@@ -141,7 +141,10 @@ const GroceryPage = () => {
               </Box>
               <SearchBar itemList={groceryList} handleSearch={handleSearch} />
             </Box>
-            <SortButton setSortBy={setSortBy} />
+            <SortButton
+              setSortBy={setSortBy}
+              sortLabel={[...SORT_LABEL, "By Ticked - ticked last"]}
+            />
           </Box>
 
           <Box

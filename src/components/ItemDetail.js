@@ -24,11 +24,14 @@ import EditItemDetailPopup from "../popups/EditItemDetailPopup";
 
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
+import { useUserContext } from "../context/UserContext";
+import TickedButton from "./buttons/TickedButton";
 
 // TODO:
 // 1. Diff stats for diff categories
 
 const ItemDetail = (props) => {
+  const { user } = useUserContext();
   const [isAddStock, setAddStock] = useState(false);
   const [isAddGrocery, setAddGrocery] = useState(false);
   const [isEditItemName, setEditItemName] = useState(false);
@@ -203,11 +206,19 @@ const ItemDetail = (props) => {
           width="20%"
         >
           <Box fontSize="1.3rem">Total Quantity: {item.totalQuantity}</Box>
-          <AddGroceryButton item={item} setAddGrocery={setAddGrocery} />
-          <AddedToGroceryListPopup
+          {isAddGrocery ? (
+            <TickedButton />
+          ) : (
+            <AddGroceryButton
+              item={item}
+              setAddGrocery={setAddGrocery}
+              user={user}
+            />
+          )}
+          {/* <AddedToGroceryListPopup
             isAddGrocery={isAddGrocery}
             handleCloseGrocery={handleCloseGrocery}
-          />
+          /> */}
         </Box>
       </Box>
       <Divider variant="middle" />

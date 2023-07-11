@@ -41,7 +41,7 @@ const SortButton = (props) => {
         open={open}
         onClose={handleClose}
       >
-        {SORT_LABEL.map((sort) => {
+        {props.sortLabel.map((sort) => {
           return (
             <Box key={sort}>
               <MenuItem

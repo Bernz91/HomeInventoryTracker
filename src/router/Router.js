@@ -3,6 +3,8 @@ import GroceryPage from "../pages/GroceryPage";
 import HomePage from "../pages/HomePage";
 import InventoryPage from "../pages/InventoryPage";
 import ItemDetailPage from "../pages/ItemDetailPage";
+import AlertPage from "../pages/AlertPage";
+import NothingHerePage from "../pages/NothingHerePage";
 
 const Router = () => {
   return (
@@ -12,7 +14,8 @@ const Router = () => {
       <Route path="/inventory" element={<InventoryPage />} />
       <Route path="/item" element={<ItemDetailPage />} />
       <Route path="/grocery" element={<GroceryPage />} />
-      <Route path="*" element={"Nothing here!"} />
+      <Route path="/alert" element={<AlertPage />} />
+      <Route path="*" element={<NothingHerePage />} />
     </Routes>
   );
 };

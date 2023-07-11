@@ -11,7 +11,7 @@ import InventoryItem from "../components/InventoryItem";
 import SearchBar from "../components/SearchBar";
 import SortButton from "../components/buttons/SortButton";
 import TitleCard from "../components/TitleCard";
-import { BACKEND_URL } from "../Constant";
+import { BACKEND_URL, SORT_LABEL } from "../Constant";
 import AddItemButton from "../components/buttons/AddItemButton";
 import AddItemPopup from "../popups/AddItemPopup";
 import { HANDLE_SORT } from "../helperFunctions/HelperFunctions";
@@ -77,7 +77,7 @@ const InventoryPage = () => {
 
   useEffect(() => {
     if (user === undefined) {
-      navigate("/home");
+      navigate("/");
     } else {
       setLoadingInventory(true);
       setLoadingCategory(true);
@@ -135,7 +135,7 @@ const InventoryPage = () => {
                 <SearchBar itemList={itemList} handleSearch={handleSearch} />
               </Box>
 
-              <SortButton setSortBy={setSortBy} />
+              <SortButton setSortBy={setSortBy} sortLabel={SORT_LABEL} />
             </Box>
           </Box>
           <Box>

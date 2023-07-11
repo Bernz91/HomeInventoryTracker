@@ -11,7 +11,6 @@ const HomePage = () => {
   const { user } = useUserContext();
   const [isRegister, setRegister] = useState(false);
 
-  console.log(user);
   return (
     <Box display="flex" flexDirection="row" height="91vh" witdth="100%">
       <Box display="flex" flexDirection="row" height="85vh" p={3}>

@@ -42,7 +42,7 @@ export const HANDLE_SORT = (sortBy, list) => {
           : b.totalQuantity - a.totalQuantity;
       });
       break;
-    case "By Ticked":
+    case "By Ticked - ticked last":
       temp.sort((a, b) => {
         return Number(a.ticked) - Number(b.ticked);
       });

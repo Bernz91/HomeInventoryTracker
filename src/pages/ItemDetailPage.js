@@ -53,7 +53,7 @@ const ItemDetailPage = () => {
 
   useEffect(() => {
     if (user === undefined) {
-      navigate("/home");
+      navigate("/");
     } else {
       setLoading(true);
       if (categories === undefined) {

@@ -3,13 +3,13 @@ import { useNavigate } from "react-router";
 import AddGroceryButton from "./buttons/AddGroceryButton";
 import AddStockButton from "./buttons/AddStockButton";
 import AddStockPopup from "../popups/AddStockPopup";
-import Backdrop from "@mui/material/Backdrop";
 import { Box } from "@mui/system";
 import { useUserContext } from "../context/UserContext";
 
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import AddedToGroceryListPopup from "../popups/AddedToGroceryListPopup";
+import TickedButton from "./buttons/TickedButton";
 
 const InventoryList = (props) => {
   const { user } = useUserContext();
@@ -45,9 +45,6 @@ const InventoryList = (props) => {
       borderRadius={2}
       p={1}
       m={1}
-      css={css`
-        cursor: pointer;
-      `}
       sx={{
         width: {
           xs: "82vw",
@@ -71,6 +68,9 @@ const InventoryList = (props) => {
             lg: "18px",
           },
         }}
+        css={css`
+          cursor: pointer;
+        `}
         onClick={handleClick}
       >
         <Box>{props.item.itemName}</Box>
@@ -100,15 +100,19 @@ const InventoryList = (props) => {
           />
         </Box>
         <Box pl={1}>
-          <AddGroceryButton
-            item={props.item}
-            setAddGrocery={setAddGrocery}
-            user={user}
-          />
-          <AddedToGroceryListPopup
+          {isAddGrocery ? (
+            <TickedButton />
+          ) : (
+            <AddGroceryButton
+              item={props.item}
+              setAddGrocery={setAddGrocery}
+              user={user}
+            />
+          )}
+          {/* <AddedToGroceryListPopup
             isAddGrocery={isAddGrocery}
             handleCloseGrocery={handleCloseGrocery}
-          />
+          /> */}
         </Box>
       </Box>
       {/* <Box
