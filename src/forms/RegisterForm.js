@@ -41,6 +41,7 @@ const RegisterForm = (props) => {
         }).then((res) => {
           setUser(res.data);
           setData(undefined);
+          props.setRegister(false);
         });
       });
     } catch (err) {
