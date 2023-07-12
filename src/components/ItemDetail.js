@@ -78,7 +78,12 @@ const ItemDetail = (props) => {
         totalCount += 1;
       }
     });
-    let avgPrice = totalAmount / totalCount;
+    let avgPrice = 0;
+    if (totalCount === 0) {
+      avgPrice = 0;
+    } else {
+      avgPrice = totalAmount / totalCount;
+    }
     return avgPrice.toFixed(2);
   };
 
