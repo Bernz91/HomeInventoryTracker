@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { useCookies } from "react-cookie";
+
 import AddGroceryButton from "./buttons/AddGroceryButton";
 import AddStockButton from "./buttons/AddStockButton";
 import AddStockPopup from "../popups/AddStockPopup";
-import { Box } from "@mui/system";
-import { useUserContext } from "../context/UserContext";
-
-/** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
 import AddedToGroceryListPopup from "../popups/AddedToGroceryListPopup";
 import TickedButton from "./buttons/TickedButton";
 
+import { Box } from "@mui/system";
+
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
+
 const InventoryList = (props) => {
-  const { user } = useUserContext();
+  const [cookies] = useCookies(["userCookie"]);
   const [isAddStock, setAddStock] = useState(false);
   const [isAddGrocery, setAddGrocery] = useState(false);
   const navigate = useNavigate();
@@ -41,6 +43,7 @@ const InventoryList = (props) => {
       display="flex"
       flexDirection="row"
       height="5vh"
+      backgroundColor={props.item.totalQuantity === 0 ? "silver" : ""}
       border="solid"
       borderRadius={2}
       p={1}
@@ -106,7 +109,7 @@ const InventoryList = (props) => {
             <AddGroceryButton
               item={props.item}
               setAddGrocery={setAddGrocery}
-              user={user}
+              user={cookies.userCookie}
             />
           )}
           {/* <AddedToGroceryListPopup

@@ -3,9 +3,7 @@ import { Box } from "@mui/system";
 import { css } from "@emotion/react";
 
 const DismissButton = () => {
-  const handleClick = (e) => {
-    console.log(e.target);
-  };
+  const handleClick = (e) => {};
   return (
     <Box
       display="flex"

@@ -3,7 +3,6 @@ import SORT_IMAGE from "../../assets/images/icons8-sort-50.png";
 import { useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import { SORT_LABEL } from "../../Constant";
 
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";

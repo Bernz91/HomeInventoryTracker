@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useCookies } from "react-cookie";
 import axios from "axios";
 
 import Box from "@mui/material/Box";
@@ -8,13 +9,12 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import { BACKEND_URL } from "../Constant";
 import ErrorHandler from "../components/ErrorHandler";
-import { useUserContext } from "../context/UserContext";
 
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
 const CheckoutForm = (props) => {
-  const { user } = useUserContext();
+  const [cookies] = useCookies(["userCookie"]);
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState();
   const {
@@ -25,7 +25,7 @@ const CheckoutForm = (props) => {
 
   const onSubmit = (data) => {
     if (data !== undefined) {
-      data.userId = user.userID;
+      data.userId = cookies.userCookie.userID;
       data.purchaseNo = props.purchase.purchaseNo;
       setData(data);
     }

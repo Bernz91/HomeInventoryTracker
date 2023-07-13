@@ -1,15 +1,15 @@
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import { useCookies } from "react-cookie";
 import Box from "@mui/material/Box";
 
 import { BACKEND_URL } from "../Constant";
-import { useUserContext } from "../context/UserContext";
 
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
 const LoginForm = (props) => {
-  const { setUser } = useUserContext();
+  const [cookies, setCookie] = useCookies(["userCookie"]);
 
   const {
     register,
@@ -29,8 +29,7 @@ const LoginForm = (props) => {
         method: "GET",
         url: `${BACKEND_URL}/user?email=${email}`,
       });
-      console.log(res.data);
-      setUser(res.data);
+      setCookie("userCookie", res.data);
     } catch (err) {
       if (err.response.data.message === "User not found.") {
         alert(

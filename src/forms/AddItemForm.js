@@ -1,22 +1,25 @@
-import { Box } from "@mui/system";
-import { useForm } from "react-hook-form";
-import Alert from "../components/Alert";
-import { BACKEND_URL } from "../Constant";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import { useForm } from "react-hook-form";
+
+import Box from "@mui/material/Box";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+
+import Alert from "../components/Alert";
+import { BACKEND_URL } from "../Constant";
 import { useCategoryContext } from "../context/CategoryContext";
+import ErrorHandler from "../components/ErrorHandler";
+
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import ErrorHandler from "../components/ErrorHandler";
-import { useUserContext } from "../context/UserContext";
 
 // TO DO
 // 1. add whether the price is per item or total
 
 const AddItemForm = (props) => {
-  const { user } = useUserContext();
+  const [cookies] = useCookies(["userCookie"]);
   const [isLoading, setLoading] = useState(false);
   const { categories } = useCategoryContext();
   const [data, setData] = useState();
@@ -29,7 +32,7 @@ const AddItemForm = (props) => {
 
   const onSubmit = (data) => {
     const temp = data;
-    temp.userId = user.userID;
+    temp.userId = cookies.userCookie.userID;
     temp.lowInventoryAlert = false;
     temp.inventoryThreshold = 0;
     temp.expiryDateAlert = false;
@@ -80,7 +83,6 @@ const AddItemForm = (props) => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      {/* "handleSubmit" will validate your inputs before invoking "onSubmit" */}
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box display="flex" flexDirection="row" justifyContent="space-between">
           <Box display="flex" flexDirection="column">

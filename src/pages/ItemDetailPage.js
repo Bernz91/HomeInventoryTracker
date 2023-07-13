@@ -1,21 +1,23 @@
-import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import { useCookies } from "react-cookie";
+import axios from "axios";
+
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from "@mui/material/Backdrop";
+
 import ItemDetail from "../components/ItemDetail";
 import TitleCard from "../components/TitleCard";
 import { BACKEND_URL } from "../Constant";
-import axios from "axios";
-import CircularProgress from "@mui/material/CircularProgress";
-import Backdrop from "@mui/material/Backdrop";
 import { useCategoryContext } from "../context/CategoryContext";
 import ErrorHandler from "../components/ErrorHandler";
-import { useUserContext } from "../context/UserContext";
 
 const ItemDetailPage = () => {
   const { state } = useLocation();
   const { itemNo } = state;
   const [item, setItem] = useState();
-  const { user } = useUserContext();
+  const [cookies] = useCookies(["userCookie"]);
 
   const [loading, setLoading] = useState(true);
   const { categories, setCategories } = useCategoryContext();
@@ -52,7 +54,7 @@ const ItemDetailPage = () => {
   };
 
   useEffect(() => {
-    if (user === undefined) {
+    if (cookies.userCookie.userID === undefined) {
       navigate("/");
     } else {
       setLoading(true);

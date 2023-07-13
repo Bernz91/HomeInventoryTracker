@@ -1,19 +1,20 @@
-import { Box } from "@mui/system";
-import { useForm } from "react-hook-form";
-import { BACKEND_URL } from "../Constant";
-import axios from "axios";
-import { SAMPLE_USER } from "../SampleData";
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+
+import Box from "@mui/material/Box";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 
+import { BACKEND_URL } from "../Constant";
+import ErrorHandler from "../components/ErrorHandler";
+
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import ErrorHandler from "../components/ErrorHandler";
-import { useUserContext } from "../context/UserContext";
 
 const AddGroceryForm = (props) => {
-  const { user } = useUserContext();
+  const [cookies] = useCookies(["userCookie"]);
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState();
   const {
@@ -24,9 +25,8 @@ const AddGroceryForm = (props) => {
 
   const onSubmit = (data) => {
     if (data !== undefined) {
-      data.userId = user.userID;
+      data.userId = cookies.userCookie.userID;
       data.itemNo = 0;
-      console.log(data);
       setData(data);
     }
   };
@@ -51,7 +51,6 @@ const AddGroceryForm = (props) => {
 
   useEffect(() => {
     if (data !== undefined) {
-      console.log(data);
       setLoading(true);
       postGrocery();
     }
@@ -65,7 +64,7 @@ const AddGroceryForm = (props) => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      {/* "handleSubmit" will validate your inputs before invoking "onSubmit" */}
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box display="flex" flexDirection="column">
           <Box

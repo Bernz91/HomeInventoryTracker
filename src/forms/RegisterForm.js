@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
 import Box from "@mui/material/Box";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 import { BACKEND_URL } from "../Constant";
-import { useUserContext } from "../context/UserContext";
 import ErrorHandler from "../components/ErrorHandler";
 
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
 const RegisterForm = (props) => {
-  const { setUser } = useUserContext();
+  const [cookies, setCookie] = useCookies(["userCookie"]);
   const [data, setData] = useState();
 
   const {
@@ -39,7 +39,7 @@ const RegisterForm = (props) => {
           method: "GET",
           url: `${BACKEND_URL}/user?email=${data.email}`,
         }).then((res) => {
-          setUser(res.data);
+          setCookie("userCookie", res.data);
           setData(undefined);
           props.setRegister(false);
         });

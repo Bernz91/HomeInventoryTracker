@@ -1,14 +1,16 @@
-import { Box } from "@mui/system";
-import { NAV_ITEMS } from "../Constant";
-import Divider from "@mui/material/Divider";
 import { useNavigate } from "react-router-dom";
-import { useUserContext } from "../context/UserContext";
+import { useCookies } from "react-cookie";
+
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+
+import { NAV_ITEMS } from "../Constant";
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
 const NavBar = () => {
   const navigate = useNavigate();
-  const { user, setUser } = useUserContext();
+  const [cookies, removeCookie] = useCookies(["userCookie"]);
   return (
     <>
       <Box display="flex" flexDirection="row" height="8vh" witdth="100%">
@@ -22,7 +24,7 @@ const NavBar = () => {
             Logo Here
           </Box>
         </Box>
-        {user === undefined ? (
+        {cookies.userCookie.userID === undefined ? (
           <></>
         ) : (
           <Box
@@ -45,7 +47,7 @@ const NavBar = () => {
                   key={item.name}
                   onClick={() => {
                     if (item.name === "Sign Out") {
-                      setUser(undefined);
+                      removeCookie("userCookie");
                       navigate(item.path);
                     } else navigate(item.path);
                   }}

@@ -1,4 +1,5 @@
-import { Box } from "@mui/system";
+import Box from "@mui/material/Box";
+import { useCookies } from "react-cookie";
 import { useEffect, useState } from "react";
 import GroceryList from "../components/GroceryList";
 import TitleCard from "../components/TitleCard";
@@ -15,7 +16,6 @@ import { css } from "@emotion/react";
 import AddGroceryPopup from "../popups/AddGroceryPopup";
 import ErrorHandler from "../components/ErrorHandler";
 import { useCategoryContext } from "../context/CategoryContext";
-import { useUserContext } from "../context/UserContext";
 import { useNavigate } from "react-router";
 
 //TO DO
@@ -26,7 +26,7 @@ import { useNavigate } from "react-router";
 // 5. DELETE ALL button
 
 const GroceryPage = () => {
-  const { user } = useUserContext();
+  const [cookies] = useCookies(["userCookie"]);
   const [isLoading, setLoading] = useState(true);
   const [isAddGrocery, setAddGrocery] = useState(false);
   const [groceryList, setGroceryList] = useState();
@@ -40,7 +40,7 @@ const GroceryPage = () => {
     try {
       const res = await axios({
         method: "GET",
-        url: `${BACKEND_URL}/user/${user.userID}/grocery`,
+        url: `${BACKEND_URL}/user/${cookies.userCookie.userID}/grocery`,
       });
       // const temp = HANDLE_SORT("By Ticked", res.data);
       setGroceryList(res.data);
@@ -67,10 +67,9 @@ const GroceryPage = () => {
   };
 
   useEffect(() => {
-    if (user === undefined) {
+    if (cookies.userCookie.userID === undefined) {
       navigate("/");
     } else {
-      setLoading(true);
       if (categories === undefined) {
         getCategories();
       }
@@ -154,7 +153,7 @@ const GroceryPage = () => {
           >
             <Box display="flex" height="70vh" width="30vw" mt={2}>
               <img
-                src={GROCERY_PAGE_PIC}
+                src={GROCERY_PAGE_PIC2}
                 style={{ maxHeight: "100%", marginBottom: 0, width: "auto" }}
                 alt="Grocery"
               />

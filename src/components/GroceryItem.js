@@ -1,17 +1,20 @@
+import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import axios from "axios";
+
 import Box from "@mui/material/Box";
+
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+
+import { BACKEND_URL } from "../Constant";
 import AddedButton from "./buttons/AddedButton";
 import AddButton from "./buttons/AddButton";
 import ReduceButton from "./buttons/ReduceButton";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import { useEffect, useState } from "react";
-import { BACKEND_URL } from "../Constant";
-import axios from "axios";
 import ErrorHandler from "./ErrorHandler";
 import AddToInventoryButton from "./buttons/AddToInventoryButton";
 import AddItemPopup from "../popups/AddItemPopup";
 import AddStockPopup from "../popups/AddStockPopup";
-import { useUserContext } from "../context/UserContext";
 
 // TO DO:
 // 1. to change the quantity by input (if possible)
@@ -19,7 +22,8 @@ import { useUserContext } from "../context/UserContext";
 
 const GroceryItem = (props) => {
   const grocery = props.grocery;
-  const { user } = useUserContext();
+  const [cookies] = useCookies(["userCookie"]);
+
   const [isTicked, setTicked] = useState(grocery.ticked);
   const [quantity, setQuantity] = useState(grocery.quantity);
   const [isAddStock, setAddStock] = useState(false);
@@ -101,7 +105,7 @@ const GroceryItem = (props) => {
       try {
         await axios({
           method: "DELETE",
-          url: `${BACKEND_URL}/grocery/new/${user.userID}?itemName=${grocery.itemName}`,
+          url: `${BACKEND_URL}/grocery/new/${cookies.userCookie.userID}?itemName=${grocery.itemName}`,
         });
         props.getGrocery();
       } catch (err) {
@@ -159,7 +163,12 @@ const GroceryItem = (props) => {
         justifyContent="center"
         width="8vw"
       >
-        <input type="checkbox" checked={isTicked} onChange={handleTickChange} />
+        <input
+          type="checkbox"
+          checked={isTicked}
+          style={{ cursor: "pointer" }}
+          onChange={handleTickChange}
+        />
       </Box>
 
       <Box

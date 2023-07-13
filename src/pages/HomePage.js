@@ -1,22 +1,22 @@
 import { useState } from "react";
+import { useCookies } from "react-cookie";
 import Box from "@mui/material/Box";
 import ItemDisplay from "../components/ItemDisplay";
 import Login from "../components/Login";
 import Register from "../components/Register";
 import TitleCard from "../components/TitleCard";
 import { HOME_PAGE_PIC } from "../Constant";
-import { useUserContext } from "../context/UserContext";
 
 const HomePage = () => {
-  const { user } = useUserContext();
   const [isRegister, setRegister] = useState(false);
+  const [cookies] = useCookies(["userCookie"]);
 
   return (
     <Box display="flex" flexDirection="row" height="91vh" witdth="100%">
       <Box display="flex" flexDirection="row" height="85vh" p={3}>
         <img src={HOME_PAGE_PIC} alt="Grocery " />
       </Box>
-      {user === undefined ? (
+      {cookies.userCookie.userID === undefined ? (
         isRegister ? (
           <Register setRegister={setRegister} />
         ) : (

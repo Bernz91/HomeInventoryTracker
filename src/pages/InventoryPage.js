@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -17,23 +18,23 @@ import AddItemPopup from "../popups/AddItemPopup";
 import { HANDLE_SORT } from "../helperFunctions/HelperFunctions";
 import ErrorHandler from "../components/ErrorHandler";
 import { useCategoryContext } from "../context/CategoryContext";
-import { useUserContext } from "../context/UserContext";
 
 // TODO:
 // 1. ADD checkbox whether to show qty=0 items
 // 2. EDIT the add button
 
 const InventoryPage = () => {
-  const { user } = useUserContext();
+  const [cookies] = useCookies(["userCookie"]);
+  const { categories, setCategories } = useCategoryContext();
   const [itemList, setItemList] = useState();
   const [selectedItem, setSelectedItem] = useState(null);
-  const { categories, setCategories } = useCategoryContext();
+  const [selectedItemList, setSelectedItemList] = useState();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [sortBy, setSortBy] = useState();
-
   const [loadingInventory, setLoadingInventory] = useState(true);
   const [loadingCategory, setLoadingCategory] = useState(true);
   const [isAddItem, setAddItem] = useState(false);
+  const [isDisplayZero, setDisplayZero] = useState(false);
 
   const navigate = useNavigate();
 
@@ -44,17 +45,37 @@ const InventoryPage = () => {
     } else setSelectedItem(null);
   };
 
+  const handleDisplayZero = () => {
+    //if isDisplayZero is false means that the checkbox is being ticked, therefore display should show zero qty items
+    if (isDisplayZero === false) {
+      setSelectedItemList(itemList);
+      setDisplayZero(true);
+    }
+    if (isDisplayZero === true) {
+      setSelectedItemList(
+        itemList.filter((item) => {
+          return item.totalQuantity !== 0;
+        })
+      );
+      setDisplayZero(false);
+    }
+  };
+
   const getInventory = async () => {
     try {
       const res = await axios({
         method: "GET",
-        url: `${BACKEND_URL}/user/${user.userID}/item`,
+        url: `${BACKEND_URL}/user/${cookies.userCookie.userID}/item`,
       });
-      setItemList(res.data);
+      const sortedList = HANDLE_SORT("Alphabetically - A -> Z", res.data);
+      const itemsGTZero = sortedList.filter((item) => {
+        return item.totalQuantity !== 0;
+      });
+      setItemList(sortedList);
+      setSelectedItemList(itemsGTZero);
       setLoadingInventory(false);
     } catch (err) {
-      console.log(err);
-      // alert(ErrorHandler(err.response.data));
+      alert(ErrorHandler(err.response.data));
     }
   };
 
@@ -76,7 +97,7 @@ const InventoryPage = () => {
   };
 
   useEffect(() => {
-    if (user === undefined) {
+    if (cookies.userCookie.userID === undefined) {
       navigate("/");
     } else {
       setLoadingInventory(true);
@@ -87,6 +108,7 @@ const InventoryPage = () => {
   }, []);
 
   useEffect(() => {
+    setSelectedItemList(HANDLE_SORT(sortBy, selectedItemList));
     setItemList(HANDLE_SORT(sortBy, itemList));
   }, [sortBy]);
 
@@ -125,14 +147,30 @@ const InventoryPage = () => {
               alignItems="center"
               justifyContent="space-between"
             >
-              <Box display="flex" flexDirection="row">
-                <Box pl={1} pr={5}>
+              <Box
+                display="flex"
+                flexDirection="row"
+                justifyContent="space-between"
+                width="85%"
+              >
+                <Box pl={1}>
                   <CategoryFilter
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
                   />
                 </Box>
-                <SearchBar itemList={itemList} handleSearch={handleSearch} />
+                <SearchBar
+                  itemList={selectedItemList}
+                  handleSearch={handleSearch}
+                />
+                <Box display="flex" alignItems="center">
+                  <input
+                    type="checkbox"
+                    style={{ cursor: "pointer" }}
+                    onClick={handleDisplayZero}
+                  />{" "}
+                  {"\u00A0"} Display zero quantity items
+                </Box>
               </Box>
 
               <SortButton setSortBy={setSortBy} sortLabel={SORT_LABEL} />
@@ -163,7 +201,7 @@ const InventoryPage = () => {
             sx={{ maxHeight: "100%", overflow: "auto" }}
           >
             {selectedItem === null ? (
-              itemList.map((item) => {
+              selectedItemList.map((item) => {
                 return (
                   <Box
                     key={item.itemNo}

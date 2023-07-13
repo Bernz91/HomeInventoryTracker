@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import SEARCH_IMAGE from "../assets/images/icons8-search-50.png";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -33,9 +33,8 @@ const SearchBar = (props) => {
           getOptionLabel={(option) => option.itemName}
           // freeSolo={true}
           autoSelect={true}
-          sx={{ width: "50vw" }}
+          sx={{ width: "45vw" }}
           onChange={(e) => {
-            // console.log(`change ${e.target.innerText}`);
             props.handleSearch(
               props.itemList.find((o) => o.itemName === e.target.innerText)
             );

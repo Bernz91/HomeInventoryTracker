@@ -1,15 +1,17 @@
 import { useEffect } from "react";
-import Box from "@mui/material/Box";
-import TitleCard from "../components/TitleCard";
-import { useUserContext } from "../context/UserContext";
+import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router";
 
+import Box from "@mui/material/Box";
+
+import TitleCard from "../components/TitleCard";
+
 const AlertPage = () => {
-  const { user } = useUserContext();
+  const [cookies] = useCookies(["userCookie"]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user === undefined) {
+    if (cookies.userCookie.userID === undefined) {
       navigate("/");
     }
   }, []);

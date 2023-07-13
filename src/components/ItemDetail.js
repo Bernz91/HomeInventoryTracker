@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { useCookies } from "react-cookie";
 //MUI imports
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
@@ -21,17 +22,16 @@ import AddStockPopup from "../popups/AddStockPopup";
 import UsageHistoryPopup from "../popups/UsageHistoryPopup";
 import AddedToGroceryListPopup from "../popups/AddedToGroceryListPopup";
 import EditItemDetailPopup from "../popups/EditItemDetailPopup";
+import TickedButton from "./buttons/TickedButton";
 
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import { useUserContext } from "../context/UserContext";
-import TickedButton from "./buttons/TickedButton";
 
 // TODO:
 // 1. Diff stats for diff categories
 
 const ItemDetail = (props) => {
-  const { user } = useUserContext();
+  const [cookies] = useCookies(["userCookie"]);
   const [isAddStock, setAddStock] = useState(false);
   const [isAddGrocery, setAddGrocery] = useState(false);
   const [isEditItemName, setEditItemName] = useState(false);
@@ -51,7 +51,6 @@ const ItemDetail = (props) => {
     return db - da;
   });
 
-  console.log(checkoutRecord);
   const navigate = useNavigate();
 
   const handleCloseGrocery = () => {
@@ -217,7 +216,7 @@ const ItemDetail = (props) => {
             <AddGroceryButton
               item={item}
               setAddGrocery={setAddGrocery}
-              user={user}
+              user={cookies.userCookie}
             />
           )}
           {/* <AddedToGroceryListPopup
